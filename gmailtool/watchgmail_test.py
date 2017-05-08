@@ -8,7 +8,7 @@ import unittest
 
 import apiclient.http
 
-from art.experimental import watchgmail
+from gmailtool import watchgmail
 
 
 def get_gmail_api_descovery_json():
