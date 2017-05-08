@@ -7,7 +7,7 @@ cache:
 matrix:
   fast_finish: true
 install:
-- python bootstrap.py
+- python buildout-bootstrap.py
 - bin/buildout annotate
 - bin/buildout
 script:
