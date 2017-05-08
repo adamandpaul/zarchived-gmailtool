@@ -1,0 +1,14 @@
+language: python
+python: 2.7
+sudo: false
+cache:
+  directories:
+  - eggs
+matrix:
+  fast_finish: true
+install:
+- python buildout-bootstrap.py
+- bin/buildout annotate
+- bin/buildout
+script:
+- bin/test

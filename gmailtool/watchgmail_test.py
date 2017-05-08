@@ -8,12 +8,12 @@ import unittest
 
 import apiclient.http
 
-from art.experimental import watchgmail
+from gmailtool import watchgmail
 
 
 def get_gmail_api_descovery_json():
     this_dir = os.path.dirname(__file__)
-    json_path = os.path.join(this_dir, 'watchgmail_test_descovery.json')
+    json_path = os.path.join(this_dir, 'mock_gmail_discovery.json')
     fin = open(json_path, 'r')
     data = fin.read()
     return data
