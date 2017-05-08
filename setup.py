@@ -25,6 +25,7 @@ setup(name='gmailtool',
       ],
       entry_points="""
       [console_scripts]
+      gmailtool = gmailtool.main:main
       """,
       )
 
