@@ -40,10 +40,8 @@ def parse_args(argv, environ, command_infos):
     # Global Arguments
     default_profile_dir = environ.get('PROFILE_DIR')
     if default_profile_dir is None:
-        if len(args.executable_name) > 0:
-            default_profile_dir = '~/.' + args.executable_name
-        else:
-            default_profile_dir = "~/.gmailtool"
+        assert len(args.executable_name) > 0, 'No profile-dir is specified and executable name is missing or zero length'
+        default_profile_dir = '~/.' + args.executable_name
     parser.add_argument('--profile-dir', default=default_profile_dir, help='The directory to store persistant data')
 
     # Command Level Arguments
