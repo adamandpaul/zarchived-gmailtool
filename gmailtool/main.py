@@ -1,24 +1,21 @@
 """Main entry point for gmailtool"""
 
 import argparse
-import errno
 import os
 import sys
 
-
-def auth(args):
-    """The authentication command
-    """
-    raise NotImplementedError('auth function not implemented')
+from gmailtool import config
 
 
-def cmd_auth_register(parser, environ):
-    """Configure the argument parser for use with the auth command
+def ensure_profile_dir_exists(profile_dir):
+    """Make sure the profile dir for the command exists
     
     Args:
-        parser (ArguementParser): The argument parser to configure
+        profile_dir (str); The path of the profile dir
     """
-    parser.set_defaults(func=auth)
+    profile_dir = os.path.expanduser(profile_dir)
+    if not os.path.exists(profile_dir):
+        os.makedirs(profile_dir)
 
 
 def parse_args(argv, environ, command_infos):
@@ -50,7 +47,7 @@ def parse_args(argv, environ, command_infos):
     parser.add_argument('--profile-dir', default=default_profile_dir, help='The directory to store persistant data')
 
     # Command Level Arguments
-    sub_parsers = parser.add_subparsers(title='command', help='gmailtool subcommand')
+    sub_parsers = parser.add_subparsers(title='command', help='gmailtool subcommands')
     for command_info in command_infos:
         sub_parser = sub_parsers.add_parser(command_info['command'], help=command_info['help'])
         command_info['register_function'](sub_parser, environ)
@@ -60,28 +57,12 @@ def parse_args(argv, environ, command_infos):
     return args
 
 
-def ensure_profile_dir_exists(profile_dir):
-    """Make sure the profile dir for the command exists
-    
-    Args:
-        profile_dir (str); The path of the profile dir
-    """
-    if not os.path.exists(profile_dir):
-        os.makedirs(profile_dir)
-
-
 def main(argv=None, environ=None, command_infos=None):
     """Main script entry point for gmailtool
     """
     argv = argv or sys.argv
     environ = environ or os.environ
-    command_infos = command_infos or [
-        {
-            'command': 'auth',
-            'help': 'Authenticate and save credentials for future invocations of gmailtool',
-            'register_function': cmd_auth_register,
-        },
-    ]
+    command_infos = command_infos or config.command_infos
     args = parse_args(argv, environ, command_infos)
     ensure_profile_dir_exists(args.profile_dir)
     args.func(args)
