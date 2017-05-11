@@ -7,22 +7,31 @@ import sys
 def auth(args):
     """The authentication command
     """
-    pass
+    raise NotImplementedError('auth function not implemented')
+
+
+def cmd_auth_configure_argument_parser(parser):
+    """Configure the argument parser for use with the auth command
+    
+    Args:
+        parser (ArguementParser): The arguement parser to configure
+    """
+    parser.set_defaults(func=auth)
 
 
 
 def main(argv=sys.argv):
     """Main script entry point for gmailtool
     """
-
     parser = argparse.ArgumentParser(description='Command line tool for fetching messages from your Gmail inbox')
-    parser.add_argument('command')
-    args = parser.parse_args(argv[1:])
+    subparsers = parser.add_subparsers(title='command', help='gmailtool subcommand')
 
-    if args.command == 'auth':
-        import pdb; pdb.set_trace()
-    else:
-        raise Exception('Unknown command: ' + args.command)
+    auth_parser = subparsers.add_parser('auth', help='Authenticate and save credentials for future invocations of gmailtool')
+    cmd_auth_configure_argument_parser(auth_parser)
+
+    args = parser.parse_args(argv[1:])
+    args.func(args)
+
 
     
 
