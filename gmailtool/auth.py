@@ -1,9 +1,13 @@
 """Google Authentication Handling"""
 
+import logging
+logger = logging.getLogger('gmailtool.auth')
 
-def auth(args):
+
+def cmd_auth(args):
     """The authentication command
     """
+    logger.debug('Running command auth')
     raise NotImplementedError('auth function not implemented')
 
 
@@ -13,4 +17,4 @@ def cmd_auth_register(parser, environ):
     Args:
         parser (ArguementParser): The argument parser to configure
     """
-    parser.set_defaults(func=auth)
+    parser.set_defaults(func=cmd_auth)

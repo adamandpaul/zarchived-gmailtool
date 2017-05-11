@@ -1,11 +1,13 @@
 """Main entry point for gmailtool"""
 
 import argparse
+import logging
 import os
 import sys
 
 from gmailtool import config
 
+logger = logging.getLogger('gmailtool')
 
 def ensure_profile_dir_exists(profile_dir):
     """Make sure the profile dir for the command exists
@@ -15,7 +17,28 @@ def ensure_profile_dir_exists(profile_dir):
     """
     profile_dir = os.path.expanduser(profile_dir)
     if not os.path.exists(profile_dir):
+        logger.debug('Creating profile directory: ' + profile_dir)
         os.makedirs(profile_dir)
+    logger.debug('Profile directory: ' + profile_dir)
+
+
+def configure_logging(verbosity):
+    """Configure logging
+    
+    Args:
+        verbosity (int): The logging veribisty...
+            0: WARN
+            1: INFO
+            >1: DEBUG
+    """
+    if verbosity <= 0:
+        level = logging.WARN
+    elif verbosity == 1:
+        level = logging.INFO
+    else:
+        assert verbosity > 1
+        level = logging.DEBUG
+    logging.basicConfig(level=level)
 
 
 def parse_args(argv, environ, command_infos):
@@ -43,6 +66,7 @@ def parse_args(argv, environ, command_infos):
         assert len(args.executable_name) > 0, 'No profile-dir is specified and executable name is missing or zero length'
         default_profile_dir = '~/.' + args.executable_name
     parser.add_argument('--profile-dir', default=default_profile_dir, help='The directory to store persistant data')
+    parser.add_argument('--verbose', '-v', action='count', help='Increase logging verbosity')
 
     # Command Level Arguments
     sub_parsers = parser.add_subparsers(title='command', help='gmailtool subcommands')
@@ -62,6 +86,7 @@ def main(argv=None, environ=None, command_infos=None):
     environ = environ or os.environ
     command_infos = command_infos or config.command_infos
     args = parse_args(argv, environ, command_infos)
+    configure_logging(args.verbose)
     ensure_profile_dir_exists(args.profile_dir)
     args.func(args)
 
