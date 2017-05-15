@@ -1,17 +1,17 @@
-"""The watchgmail library
+"""The mailstream module
 """
 
 import apiclient
 import email
 import json
 
-class WatchGmail(object):
-    """Primary interface into the watch gmail library
+class GmailMailStream(object):
+    """Present the Gmail API as a mail stream which can be sequentially accessed by .read()
     """
 
 
     def __init__ (self, http, mailbox, cursor=None):
-        """Initialize WatchGmail
+        """Initialize a Gmail mail stream object
 
         Args:
             http (http): An oauthed http object from the google oauth system
@@ -27,6 +27,7 @@ class WatchGmail(object):
             cursor_dict = json.loads(cursor)
             self._cursor_last_history_id = cursor_dict['last_history_id']
 
+
     @property
     def cursor(self):
         """str: JSON representation of the inbox cursor"""
@@ -35,12 +36,15 @@ class WatchGmail(object):
 
     def read(self):
         """Read a bunch of messages from gmail.
-
-        In most cases a single email will be returned and the cursor
-        will move forward in time. It is possible for multiple message 
-        to be contained in a single page of history
-
-        A ``None`` will be returned if there are no message after the current history
+        
+        Each time read is called it will attempt advance one history at at time.
+        If advancing the history was successful then a list of email messages that were
+        added to the mailbox will be returned. If we are at the most current history for the
+        inbox and thus history was not advanced then None is returned.
+        
+        It is possible that an empty list is returned signifiying that history was advanced
+        but no new emails were added in the new history. Call read() another time to advance
+        further.
 
         Returns:
             List of email message: A list of email messasges in the next page of history
