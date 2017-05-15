@@ -1,4 +1,4 @@
-"""Testing the watchgmail python module
+"""Testing the mailstream python module
 """
 
 import json
@@ -8,7 +8,7 @@ import unittest
 
 import apiclient.http
 
-from gmailtool import watchgmail
+from gmailtool import mailstream
 
 
 def get_gmail_api_descovery_json():
@@ -56,23 +56,23 @@ def generate_mock_message(message_id, sender='sender@example.adamandpaul.biz', r
 
 
 class TestInitializing(unittest.TestCase):
-    """Testing initializing watchgmail object with/without setting the watch cursor"""
+    """Testing initializing GmailMailStream object with/without setting the mail stream cursor"""
 
-    def test_new_watch_shoul_start_cursor_at_latest_history_from_gmail_user_profile(self):
+    def test_new_stream_should_start_cursor_at_latest_history_from_gmail_user_profile(self):
         http = apiclient.http.HttpMockSequence([
             ({'status': '200'}, get_gmail_api_descovery_json()),
             ({'status': '200'}, '{"historyId": 12345}'),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        inbox = watchgmail.WatchGmail(http, 'email@example.adamandpaul.biz')
+        inbox = mailstream.GmailMailStream(http, 'email@example.adamandpaul.biz')
         self.assertIn('12345', inbox.cursor, 'expected history id of 12345 to be contained in cursor value')
 
-    def test_new_watch_should_init_with_pre_saved_history_id(self):
+    def test_new_stream_should_init_with_pre_saved_history_id(self):
         http = apiclient.http.HttpMockSequence([
             ({'status': '200'}, get_gmail_api_descovery_json()),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        inbox = watchgmail.WatchGmail(http, 'email@example.adamandpaul.biz', cursor='{"last_history_id":7474}')
+        inbox = mailstream.GmailMailStream(http, 'email@example.adamandpaul.biz', cursor='{"last_history_id":7474}')
         self.assertIn('7474', inbox.cursor, 'expected history id of 7474 not contained in cursor value')
 
 
@@ -101,9 +101,9 @@ class TestNewEmailInInbox(unittest.TestCase):
             ({'status': '200'}, json.dumps(self.test_message)),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = watchgmail.WatchGmail(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
 
-    def test_read_watch_should_return_newly_arrived_message(self):
+    def test_read_stream_should_return_newly_arrived_message(self):
         inbox = self.inbox
         messages = inbox.read()
         self.assertEqual(len(messages), 1, 'expected exactly one email')
@@ -129,7 +129,7 @@ class TestNoNewEmail(unittest.TestCase):
             ),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = watchgmail.WatchGmail(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
 
     def test_read_should_return_none_when_inbox_has_no_new_messages(self):
         inbox = self.inbox
@@ -167,9 +167,9 @@ class TestMultipleEmailsInSingleHistory(unittest.TestCase):
             ({'status': '200'}, json.dumps(self.test_message_2)),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = watchgmail.WatchGmail(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
 
-    def test_read_watch_should_return_newly_arrived_message(self):
+    def test_read_stream_should_return_newly_arrived_message(self):
         inbox = self.inbox
         messages = inbox.read()
         self.assertEqual(len(messages), 2, 'expected exactly two emails')
