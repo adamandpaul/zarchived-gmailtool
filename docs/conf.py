@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+"""Configuration file for sphinx"""
 import sys
 import os
 import shlex

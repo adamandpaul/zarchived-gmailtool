@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Google Authentication Handling"""
 
 import json

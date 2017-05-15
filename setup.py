@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """setup.py script for gmailtool"""
 
 from setuptools import setup, find_packages

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Test Suite for gmailtool
 
 Auto discover tests in gmailtool
