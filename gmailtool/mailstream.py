@@ -15,6 +15,7 @@ class GmailMailStream(object):
 
         Args:
             http (http): An oauthed http object from the google oauth system
+            mailbox (str): The mailbox to read (e.g. example@gmail.com)
             cursor (str): The cursor data to load the current position in the inbox
         """
         self._api = apiclient.discovery.build('gmail', 'v1', http=http)
@@ -47,8 +48,8 @@ class GmailMailStream(object):
         further.
 
         Returns:
-            List of email message: A list of email messasges in the next page of history
-            None: We are already at the latest history and can not read any more
+            List of email message or None: A list of email messasges in the next page of history.
+            Returns None if we are already at the latest history and can not read any more
         """
 
         history_list = self._api.users().history().list(userId=self._mailbox,
