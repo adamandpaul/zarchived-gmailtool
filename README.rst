@@ -18,6 +18,7 @@ Quick Links:
 
 - `API Documentation <http://gmailtool.readthedocs.io>`_
 - `Contributor Documentation <https://github.com/adamandpaul/gmailtool/wiki>`_
+- `Feedback/Suggestions - Issue Tracker <https://github.com/adamandpaul/gmailtool/issues>`_ (feel free to ask questions here too)
 
 Usage
 =====
