@@ -1,8 +1,10 @@
 *.egg-info
 *.pyc
+/.coverage
 /.idea
 /.installed.cfg
 /bin
 /develop-eggs
 /eggs
+/htmlcov
 /var
