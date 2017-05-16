@@ -1,0 +1,6 @@
+[report]
+omit =
+    */*_test.py
+    parts/*
+    eggs/*
+    /usr/*
