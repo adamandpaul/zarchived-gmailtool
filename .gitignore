@@ -1,6 +1,8 @@
 *.egg-info
 *.pyc
+/.idea
 /.installed.cfg
 /bin
 /develop-eggs
 /eggs
+/var
