@@ -4,6 +4,6 @@ omit =
     eggs/*
     gmailtool/tests.py
     parts/*
-    /home/travis/virtualenv
+    /home/travis/virtualenv/*
     /usr/*
     */*_test.py
