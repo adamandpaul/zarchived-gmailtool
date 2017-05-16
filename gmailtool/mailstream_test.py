@@ -2,14 +2,12 @@
 """Testing the mailstream python module
 """
 
-import json
-import os
-import tempfile
-import unittest
+from gmailtool import mailstream
 
 import apiclient.http
-
-from gmailtool import mailstream
+import json
+import os
+import unittest
 
 
 def get_gmail_api_descovery_json():
@@ -20,7 +18,9 @@ def get_gmail_api_descovery_json():
     return data
 
 
-def generate_mock_message(message_id, sender='sender@example.adamandpaul.biz', recipient='recipient@example.adamandpaul.biz'):
+def generate_mock_message(message_id,
+                          sender='sender@example.adamandpaul.biz',
+                          recipient='recipient@example.adamandpaul.biz'):
     """Generate a mock gmail message structure for testing purposes in the raw format
 
     Implements many of the fields from the api reference:
@@ -45,7 +45,7 @@ def generate_mock_message(message_id, sender='sender@example.adamandpaul.biz', r
     message = {
         'id': message_id,
         'payload': {
-            'headers' : [
+            'headers': [
                 {'name': 'from', 'value': sender},
                 {'name': 'to', 'value': recipient},
                 {'name': 'subject', 'value': message_id},
@@ -93,7 +93,7 @@ class TestNewEmailInInbox(unittest.TestCase):
                         {
                             'id': 2,
                             'messagesAdded': [
-                                { 'message': self.test_message },
+                                {'message': self.test_message},
                             ]
                         },
                     ]
@@ -102,7 +102,9 @@ class TestNewEmailInInbox(unittest.TestCase):
             ({'status': '200'}, json.dumps(self.test_message)),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http,
+                                                'recipient@example.adamandpaul.biz',
+                                                cursor='{"last_history_id": 1}')
 
     def test_read_stream_should_return_newly_arrived_message(self):
         inbox = self.inbox
@@ -116,7 +118,7 @@ class TestNewEmailInInbox(unittest.TestCase):
 class TestNoNewEmail(unittest.TestCase):
     """Testing the case of no new email after the cursor in current inbox
     """
-    
+
     def setUp(self):
         self.test_message_id = 'test1234'
         self.test_message = generate_mock_message(self.test_message_id)
@@ -130,7 +132,9 @@ class TestNoNewEmail(unittest.TestCase):
             ),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http,
+                                                'recipient@example.adamandpaul.biz',
+                                                cursor='{"last_history_id": 1}')
 
     def test_read_should_return_none_when_inbox_has_no_new_messages(self):
         inbox = self.inbox
@@ -157,8 +161,8 @@ class TestMultipleEmailsInSingleHistory(unittest.TestCase):
                         {
                             'id': 2,
                             'messagesAdded': [
-                                { 'message': self.test_message_1 },
-                                { 'message': self.test_message_2 },
+                                {'message': self.test_message_1},
+                                {'message': self.test_message_2},
                             ]
                         },
                     ]
@@ -168,16 +172,20 @@ class TestMultipleEmailsInSingleHistory(unittest.TestCase):
             ({'status': '200'}, json.dumps(self.test_message_2)),
             ({'status': '403'}, 'Should never be requested'),
         ])
-        self.inbox = mailstream.GmailMailStream(http, 'recipient@example.adamandpaul.biz', cursor='{"last_history_id": 1}')
+        self.inbox = mailstream.GmailMailStream(http,
+                                                'recipient@example.adamandpaul.biz',
+                                                cursor='{"last_history_id": 1}')
 
     def test_read_stream_should_return_newly_arrived_message(self):
         inbox = self.inbox
         messages = inbox.read()
         self.assertEqual(len(messages), 2, 'expected exactly two emails')
         message_1 = messages[0]
-        self.assertEqual(message_1['subject'], self.test_message_1_id, 'expected email with subject ' + self.test_message_1_id)
+        self.assertEqual(message_1['subject'],
+                         self.test_message_1_id,
+                         'expected email with subject ' + self.test_message_1_id)
         message_2 = messages[1]
-        self.assertEqual(message_2['subject'], self.test_message_2_id, 'expected email with subject ' + self.test_message_2_id)
+        self.assertEqual(message_2['subject'],
+                         self.test_message_2_id,
+                         'expected email with subject ' + self.test_message_2_id)
         self.assertIn('2', inbox.cursor, 'expected cursor to incriment to 2')
-
-

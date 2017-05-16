@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """setup.py script for gmailtool"""
 
-from setuptools import setup, find_packages
+from setuptools import setup
+
 
 setup(name='gmailtool',
       version='1.0.dev1',
       description='Command line tool for interacting with gmail',
-      long_description = open('README.rst').read(),
+      long_description=open('README.rst').read(),
       classifiers=[
-          'Topic :: Communications :: Email', 
+          'Topic :: Communications :: Email',
           'Programming Language :: Python',
       ],
       keywords='',
@@ -29,5 +30,3 @@ setup(name='gmailtool',
       gmailtool = gmailtool.main:main
       """,
       )
-
-

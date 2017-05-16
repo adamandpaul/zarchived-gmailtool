@@ -2,11 +2,11 @@
 """Main entry point for gmailtool"""
 
 import argparse
+import gmailtool.argument_parser
+import gmailtool.auth
 import logging
 import os
 import sys
-import gmailtool.argument_parser
-import gmailtool.auth
 
 
 logger = logging.getLogger('gmailtool')
@@ -14,10 +14,10 @@ logger = logging.getLogger('gmailtool')
 
 def register_sub_commands(parsers, environ):
     """Register sub commands
-    
+
     This function calls the register commands fucntion associated with
     each sub command.
-    
+
     Args:
         parsers (Arguement Parsers Object): Object to use to add parsers for commands
         environ (dict): The environment dictionary
@@ -27,10 +27,10 @@ def register_sub_commands(parsers, environ):
 
 def configure_logging(verbosity):
     """Reconfigure logging with selected verbosity
-    
+
     Sets the root logger and updates the args so oauth logging
     will also be configured properly
-    
+
     Args:
         args (Object): Application args
         verbosity (int): The logging veribisty...
@@ -49,8 +49,8 @@ def configure_logging(verbosity):
 
 
 def ensure_profile_dir_exists(profile_dir):
-    """Make sure the profile dir for the command exists
-    
+    """Make sure the profile dir for the command exist
+
     Args:
         profile_dir (str); The path of the profile dir
     """
@@ -97,4 +97,3 @@ def main(argv=None, environ=None, callback_register_sub_commands=None):
 
     # Execute sub command
     args.func(args)
-

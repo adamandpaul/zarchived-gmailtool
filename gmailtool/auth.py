@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 """Google Authentication Handling"""
 
-import json
-import logging
-import os
-import tempfile
 
 from gmailtool import config
 
+import json
+import logging
 import oauth2client
 import oauth2client.file
 import oauth2client.tools
+import os
+import tempfile
+
 
 logger = logging.getLogger('gmailtool.auth')
 
@@ -24,7 +25,6 @@ def cmd_auth(args):
     credentials_storage = oauth2client.file.Storage(credentials_storage_path)
     credentials = credentials_storage.get()
     if credentials is None or credentials.invalid:
-
 
         client_secret_file_handle, client_secret_path = tempfile.mkstemp()
         client_secret_fout = os.fdopen(client_secret_file_handle, 'w')
@@ -41,7 +41,7 @@ def cmd_auth(args):
 
 def cmd_auth_register(parsers, environ):
     """Configure the argument parser for use with the auth command
-    
+
     Args:
         parsers (Parsers): The parsers which belong to the higher level parser
     """
@@ -49,4 +49,3 @@ def cmd_auth_register(parsers, environ):
                                 help='Authenticate and save credentials for future invocations of gmailtool',
                                 parents=[oauth2client.tools.argparser])
     parser.set_defaults(func=cmd_auth)
-

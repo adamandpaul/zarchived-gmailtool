@@ -4,8 +4,10 @@
 Auto discover tests in gmailtool
 """
 
+
 import pkg_resources
 import unittest
+
 
 def test_suite(package_name='gmailtool', pattern='*_test.py'):
     """Create the test suite used for the test runer
@@ -33,4 +35,3 @@ def test_suite(package_name='gmailtool', pattern='*_test.py'):
                                  pattern=pattern,
                                  top_level_dir=top_level_dir)
     return suite
-        
